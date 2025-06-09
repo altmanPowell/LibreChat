@@ -37,8 +37,9 @@ export default function AgentPanelSwitch() {
         mcp_id: '1',
         agent_id: currentAgentId ?? '',
         metadata: {
-          label: 'Gmail',
-          domain: 'gmail.googleapis.com',
+          name: 'Gmail',
+          description: 'Gmail MCP',
+          url: 'mcp.googleapis.com',
           auth: {
             type: AuthTypeEnum.OAuth,
             authorization_url: 'https://accounts.google.com/o/oauth2/auth',
@@ -66,8 +67,9 @@ export default function AgentPanelSwitch() {
         mcp_id: '2',
         agent_id: currentAgentId ?? '',
         metadata: {
-          label: 'Pipedream',
-          domain: 'api.pipedream.com',
+          name: 'Pipedream',
+          description: 'Pipedream MCP',
+          url: 'mcp.pipedream.com',
           auth: {
             type: AuthTypeEnum.ServiceHttp,
             authorization_type: AuthorizationTypeEnum.Bearer,
@@ -91,8 +93,9 @@ export default function AgentPanelSwitch() {
         mcp_id: '3',
         agent_id: currentAgentId ?? '',
         metadata: {
-          label: 'Cloudflare',
-          domain: 'api.cloudflare.com',
+          name: 'Cloudflare',
+          description: 'Cloudflare MCP',
+          url: 'mcp.cloudflare.com',
           auth: {
             type: AuthTypeEnum.ServiceHttp,
             authorization_type: AuthorizationTypeEnum.Bearer,
