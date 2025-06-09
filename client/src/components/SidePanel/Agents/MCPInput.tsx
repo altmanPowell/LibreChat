@@ -6,6 +6,8 @@ import { Spinner } from '~/components/svg';
 import { Label, Checkbox } from '~/components/ui';
 import { MCPForm } from '~/common/types';
 import { MCP } from 'librechat-data-provider/dist/types/types/assistants';
+import MCPIcon from './MCPIcon';
+import MCPAuth from '~/components/SidePanel/Builder/ActionsAuth';
 
 function useUpdateAgentMCP({
   onSuccess,
@@ -147,26 +149,80 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
     }
   };
 
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setMCP((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            metadata: {
+              ...prev.metadata,
+              icon: base64String,
+            },
+          };
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="label">{localize('com_assistants_mcp_label')}</Label>
-        <input
-          id="label"
-          {...register('label')}
-          className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
-          placeholder={localize('com_assistants_my_mcp_server')}
-        />
+      {/* Icon Picker */}
+      <div className="mb-4">
+        <MCPIcon icon={mcp?.metadata.icon} onIconChange={handleIconChange} />
       </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="domain">{localize('com_assistants_mcp_url')}</Label>
-        <input
-          id="domain"
-          {...register('domain')}
-          className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
-          placeholder={'https://mcp.example.com'}
-        />
+      {/* name, description, url */}
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="name">{localize('com_assistants_mcp_name')}</Label>
+          <input
+            id="name"
+            {...register('name')}
+            className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
+            placeholder={localize('com_assistants_mcp_name_placeholder')}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="description">
+            {localize('com_assistants_mcp_description')}
+            <span className="ml-1 text-xs text-text-secondary-alt">
+              {localize('com_assistants_mcp_description_optional')}
+            </span>
+          </Label>
+          <input
+            id="description"
+            {...register('description')}
+            className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
+            placeholder={localize('com_assistants_mcp_description_placeholder')}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="url">{localize('com_assistants_mcp_url')}</Label>
+          <input
+            id="url"
+            {...register('url')}
+            className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
+            placeholder={'https://mcp.example.com'}
+          />
+        </div>
+        <MCPAuth />
+        {/* trust checkmark I trust this application -subtext below Custom connectors are not verified by LibreChat */}
+        <div className="my-2 flex items-center gap-2">
+          <Checkbox id="trust" />
+          <Label htmlFor="trust" className="flex flex-col">
+            {localize('com_assistants_mcp_trust')}
+            <span className="text-xs text-text-secondary">
+              {localize('com_assistants_mcp_trust_subtext')}
+            </span>
+          </Label>
+        </div>
       </div>
+
       <div className="flex items-center justify-end">
         <button
           onClick={saveMCP}
