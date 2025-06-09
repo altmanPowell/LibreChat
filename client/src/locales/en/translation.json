@@ -1009,7 +1009,6 @@
   "com_assistants_add_mcp": "Add MCP",
   "com_assistants_my_mcp_server": "my_mcp_server",
   "com_assistants_mcp_label": "Label",
-  "com_assistants_mcp_url": "URL",
   "com_assistants_add_mcp_server": "Add MCP Server",
   "com_assistants_edit_mcp_server": "Edit MCP Server",
   "com_assistants_mcps_disabled": "You need to create an assistant before adding MCPs.",
@@ -1022,5 +1021,17 @@
   "com_assistants_update_mcp_success": "Successfully created or updated MCP",
   "com_assistants_available_tools": "Available Tools",
   "com_ui_select_all": "Select All",
-  "com_ui_deselect_all": "Deselect All"
+  "com_ui_deselect_all": "Deselect All",
+  "com_assistants_mcp_name": "Name",
+  "com_assistants_mcp_name_placeholder": "Custom Tool",
+  "com_assistants_mcp_description": "Description",
+  "com_assistants_mcp_description_optional": "(optional)",
+  "com_assistants_mcp_description_placeholder": "Explain what it does in a few words",
+  "com_assistants_mcp_url": "MCP Server URL",
+  "com_assistants_mcp_url_placeholder": "https://example.com/sse",
+  "com_assistants_mcp_trust": "I trust this application",
+  "com_assistants_mcp_trust_subtext": "Custom connectors are not verified by LibreChat",
+  "com_assistants_mcp_icon": "Icon",
+  "com_assistants_mcp_icon_optional": "(optional)",
+  "com_assistants_mcp_icon_size": "Minimum size 128 x 128 px"
 }
