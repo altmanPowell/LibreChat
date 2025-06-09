@@ -40,6 +40,7 @@ export default function AgentPanelSwitch() {
           name: 'Gmail',
           description: 'Gmail MCP',
           url: 'mcp.googleapis.com',
+          icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTI0IDUuNDU3djEzLjkwOWMwIC45MDQtLjczMiAxLjYzNi0xLjYzNiAxLjYzNmgtMy44MTlWMTEuNzNMMTIgMTYuNjRsLTYuNTQ1LTQuOTF2OS4yNzNIMS42MzZBMi4xMzYgMi4xMzYgMCAwIDEgMCAxOS4zNjZWNS40NTdjMC0yLjAyMyAyLjMwOS0zLjE3OCAzLjkyNy0xLjk2NEw1LjQ1NSA0LjY0IDEyIDkuNTQ4bDYuNTQ1LTQuOTEgMS41MjgtMS4xNDVDMjEuNjkgMi4yOCAyNCAzLjQzNCAyNCA1LjQ1N3oiIGZpbGw9IiNlYTQzMzUiLz48L3N2Zz4=',
           auth: {
             type: AuthTypeEnum.OAuth,
             authorization_url: 'https://accounts.google.com/o/oauth2/auth',
