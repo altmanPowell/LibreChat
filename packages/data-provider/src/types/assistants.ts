@@ -534,6 +534,7 @@ export type MCPMetadata = Omit<ActionMetadata, 'auth'> & {
   tools?: string[];
   auth?: MCPAuth;
   icon?: string;
+  trust?: boolean;
 };
 
 export type ActionMetadataRuntime = ActionMetadata & {

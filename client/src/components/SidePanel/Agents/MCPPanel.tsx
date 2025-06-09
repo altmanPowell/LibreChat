@@ -69,6 +69,12 @@ export default function MCPPanel({ mcp, setMcp, agent_id, setActivePanel }: Agen
       client_url: '',
       scope: '',
       token_exchange_method: TokenExchangeMethodEnum.DefaultPost,
+      name: '',
+      description: '',
+      url: '',
+      tools: [],
+      icon: '',
+      trust: false,
     },
   });
 
@@ -82,6 +88,7 @@ export default function MCPPanel({ mcp, setMcp, agent_id, setActivePanel }: Agen
         description: mcp.metadata.description ?? '',
         url: mcp.metadata.url ?? '',
         tools: mcp.metadata.tools ?? [],
+        trust: mcp.metadata.trust ?? false,
       };
 
       if (mcp.metadata.auth) {

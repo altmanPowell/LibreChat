@@ -173,6 +173,7 @@ export type MCPForm = ActionAuthForm & {
   url?: string;
   tools?: string[];
   icon?: string;
+  trust?: boolean;
 };
 
 export type ActionWithNullableMetadata = Omit<t.Action, 'metadata'> & {

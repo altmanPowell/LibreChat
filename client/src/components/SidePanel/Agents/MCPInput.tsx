@@ -8,6 +8,7 @@ import { MCPForm } from '~/common/types';
 import { MCP } from 'librechat-data-provider/dist/types/types/assistants';
 import MCPIcon from './MCPIcon';
 import MCPAuth from '~/components/SidePanel/Builder/ActionsAuth';
+import { Controller } from 'react-hook-form';
 
 function useUpdateAgentMCP({
   onSuccess,
@@ -68,7 +69,12 @@ interface MCPInputProps {
 export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
   const localize = useLocalize();
   const { showToast } = useToastContext();
-  const { handleSubmit, register } = useFormContext<MCPForm>();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    control,
+  } = useFormContext<MCPForm>();
   const [isLoading, setIsLoading] = useState(false);
   const [showTools, setShowTools] = useState(false);
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
@@ -101,29 +107,31 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
     },
   });
 
-  const saveMCP = handleSubmit((mcpFormData) => {
-    const currentAgentId = agent_id ?? '';
-    if (!currentAgentId) {
-      return;
-    }
-
+  const onSubmit = async (data: MCPForm) => {
     setIsLoading(true);
-    let { metadata = {} } = mcp ?? {};
-    const mcp_id = mcp?.mcp_id;
-    metadata = {
-      ...metadata,
-      name: mcpFormData.name,
-      description: mcpFormData.description,
-      url: mcpFormData.url,
-      icon: mcpFormData.icon,
-    };
-
-    updateAgentMCP.mutate({
-      mcp_id,
-      metadata,
-      agent_id: currentAgentId,
-    });
-  });
+    try {
+      const response = await updateAgentMCP.mutate({
+        agent_id: agent_id ?? '',
+        mcp_id: mcp?.mcp_id,
+        metadata: {
+          ...data,
+          tools: selectedTools,
+        },
+      });
+      setMCP(response[1]);
+      showToast({
+        message: localize('com_assistants_update_mcp_success'),
+        status: 'success',
+      });
+    } catch (error) {
+      showToast({
+        message: localize('com_assistants_update_mcp_error'),
+        status: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSelectAll = () => {
     if (mcp?.metadata.tools) {
@@ -182,10 +190,13 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
           <Label htmlFor="name">{localize('com_assistants_mcp_name')}</Label>
           <input
             id="name"
-            {...register('name')}
+            {...register('name', { required: true })}
             className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
             placeholder={localize('com_assistants_mcp_name_placeholder')}
           />
+          {errors.name && (
+            <span className="text-xs text-red-500">{localize('com_ui_field_required')}</span>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="description">
@@ -205,15 +216,30 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
           <Label htmlFor="url">{localize('com_assistants_mcp_url')}</Label>
           <input
             id="url"
-            {...register('url')}
+            {...register('url', {
+              required: true,
+            })}
             className="border-token-border-medium flex h-9 w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-text-secondary-alt focus:ring-1 focus:ring-border-light"
             placeholder={'https://mcp.example.com'}
           />
+          {errors.url && (
+            <span className="text-xs text-red-500">
+              {errors.url.type === 'required'
+                ? localize('com_ui_field_required')
+                : errors.url.message}
+            </span>
+          )}
         </div>
         <MCPAuth />
-        {/* trust checkmark I trust this application -subtext below Custom connectors are not verified by LibreChat */}
         <div className="my-2 flex items-center gap-2">
-          <Checkbox id="trust" />
+          <Controller
+            name="trust"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Checkbox id="trust" checked={field.value} onCheckedChange={field.onChange} />
+            )}
+          />
           <Label htmlFor="trust" className="flex flex-col">
             {localize('com_assistants_mcp_trust')}
             <span className="text-xs text-text-secondary">
@@ -221,11 +247,14 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
             </span>
           </Label>
         </div>
+        {errors.trust && (
+          <span className="text-xs text-red-500">{localize('com_ui_field_required')}</span>
+        )}
       </div>
 
       <div className="flex items-center justify-end">
         <button
-          onClick={saveMCP}
+          onClick={handleSubmit(onSubmit)}
           disabled={isLoading}
           className="focus:shadow-outline mt-1 flex min-w-[100px] items-center justify-center rounded bg-green-500 px-4 py-2 font-semibold text-white hover:bg-green-400 focus:border-green-500 focus:outline-none focus:ring-0 disabled:bg-green-400"
           type="button"
