@@ -174,7 +174,6 @@ export default function MCPPanel({ mcp, setMcp, agent_id, setActivePanel }: Agen
             </div>
             <div className="text-xs text-text-secondary">{localize('com_assistants_mcp_info')}</div>
           </div>
-          <MCPAuth />
           <MCPInput mcp={mcp} agent_id={agent_id} setMCP={setMcp} />
         </div>
       </form>
