@@ -57,7 +57,7 @@ export default function MCP({ mcp, onClick }: MCPProps) {
       </div>
       <div
         className={cn(
-          'h-9 w-9 min-w-9 items-center justify-center rounded-lg transition-colors duration-200 hover:bg-surface-tertiary focus:outline-none focus:ring-2 focus:ring-text-primary group-focus:flex',
+          'ml-auto h-9 w-9 min-w-9 items-center justify-center rounded-lg transition-colors duration-200 hover:bg-surface-tertiary focus:outline-none focus:ring-2 focus:ring-text-primary group-focus:flex',
           isHovering ? 'flex' : 'hidden',
         )}
         aria-label="Settings"
