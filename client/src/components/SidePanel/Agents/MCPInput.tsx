@@ -123,7 +123,7 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
         message: localize('com_assistants_update_mcp_success'),
         status: 'success',
       });
-    } catch (error) {
+    } catch {
       showToast({
         message: localize('com_assistants_update_mcp_error'),
         status: 'error',
