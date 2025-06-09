@@ -527,9 +527,13 @@ export type ActionMetadata = {
   oauth_client_secret?: string;
 };
 
-export type MCPMetadata = ActionMetadata & {
-  label?: string;
+export type MCPMetadata = Omit<ActionMetadata, 'auth'> & {
+  name?: string;
+  description?: string;
+  url?: string;
   tools?: string[];
+  auth?: MCPAuth;
+  icon?: string;
 };
 
 export type ActionMetadataRuntime = ActionMetadata & {

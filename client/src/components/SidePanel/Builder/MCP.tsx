@@ -24,7 +24,7 @@ export default function MCP({ mcp, onClick }: MCPProps) {
       className="group flex w-full rounded-lg border border-border-medium text-sm hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-text-primary"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      aria-label={`MCP for ${mcp.metadata.label}`}
+      aria-label={`MCP for ${mcp.metadata.name}`}
     >
       <div
         className="h-9 grow overflow-hidden text-ellipsis whitespace-nowrap px-3 py-2"

@@ -4,7 +4,7 @@ import { useToastContext } from '~/Providers';
 import useLocalize from '~/hooks/useLocalize';
 import { Spinner } from '~/components/svg';
 import { Label, Checkbox } from '~/components/ui';
-import { MCPAuthForm } from '~/common/types';
+import { MCPForm } from '~/common/types';
 import { MCP } from 'librechat-data-provider/dist/types/types/assistants';
 
 function useUpdateAgentMCP({
@@ -66,7 +66,7 @@ interface MCPInputProps {
 export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
   const localize = useLocalize();
   const { showToast } = useToastContext();
-  const { handleSubmit, register } = useFormContext<MCPAuthForm>();
+  const { handleSubmit, register } = useFormContext<MCPForm>();
   const [isLoading, setIsLoading] = useState(false);
   const [showTools, setShowTools] = useState(false);
   const [selectedTools, setSelectedTools] = useState<string[]>([]);
@@ -99,7 +99,7 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
     },
   });
 
-  const saveMCP = handleSubmit((authFormData) => {
+  const saveMCP = handleSubmit((mcpFormData) => {
     const currentAgentId = agent_id ?? '';
     if (!currentAgentId) {
       return;
@@ -110,8 +110,10 @@ export default function MCPInput({ mcp, agent_id, setMCP }: MCPInputProps) {
     const mcp_id = mcp?.mcp_id;
     metadata = {
       ...metadata,
-      label: authFormData.label,
-      domain: authFormData.domain,
+      name: mcpFormData.name,
+      description: mcpFormData.description,
+      url: mcpFormData.url,
+      icon: mcpFormData.icon,
     };
 
     updateAgentMCP.mutate({

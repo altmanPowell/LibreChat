@@ -6,8 +6,7 @@ import {
   TokenExchangeMethodEnum,
 } from 'librechat-data-provider';
 import { ChevronLeft } from 'lucide-react';
-import type { AgentPanelProps, MCPAuthForm } from '~/common';
-import MCPAuth from '~/components/SidePanel/Builder/ActionsAuth';
+import type { AgentPanelProps, MCPForm } from '~/common';
 import { OGDialog, OGDialogTrigger, Label } from '~/components/ui';
 import OGDialogTemplate from '~/components/ui/OGDialogTemplate';
 // TODO: Add MCP delete (for now mocked for ui)
@@ -57,7 +56,7 @@ export default function MCPPanel({ mcp, setMcp, agent_id, setActivePanel }: Agen
     },
   });
 
-  const methods = useForm<MCPAuthForm>({
+  const methods = useForm<MCPForm>({
     defaultValues: {
       type: AuthTypeEnum.None,
       saved_auth_fields: false,
@@ -76,23 +75,32 @@ export default function MCPPanel({ mcp, setMcp, agent_id, setActivePanel }: Agen
   const { reset } = methods;
 
   useEffect(() => {
-    if (mcp?.metadata.auth) {
-      reset({
-        type: mcp.metadata.auth.type || AuthTypeEnum.None,
-        saved_auth_fields: false,
-        api_key: mcp.metadata.api_key ?? '',
-        authorization_type: mcp.metadata.auth.authorization_type || AuthorizationTypeEnum.Basic,
-        oauth_client_id: mcp.metadata.oauth_client_id ?? '',
-        oauth_client_secret: mcp.metadata.oauth_client_secret ?? '',
-        authorization_url: mcp.metadata.auth.authorization_url ?? '',
-        client_url: mcp.metadata.auth.client_url ?? '',
-        scope: mcp.metadata.auth.scope ?? '',
-        token_exchange_method:
-          mcp.metadata.auth.token_exchange_method ?? TokenExchangeMethodEnum.DefaultPost,
-        label: mcp.metadata.label ?? '',
-        domain: mcp.metadata.domain ?? '',
+    if (mcp) {
+      const formData = {
+        icon: mcp.metadata.icon ?? '',
+        name: mcp.metadata.name ?? '',
+        description: mcp.metadata.description ?? '',
+        url: mcp.metadata.url ?? '',
         tools: mcp.metadata.tools ?? [],
-      });
+      };
+
+      if (mcp.metadata.auth) {
+        Object.assign(formData, {
+          type: mcp.metadata.auth.type || AuthTypeEnum.None,
+          saved_auth_fields: false,
+          api_key: mcp.metadata.api_key ?? '',
+          authorization_type: mcp.metadata.auth.authorization_type || AuthorizationTypeEnum.Basic,
+          oauth_client_id: mcp.metadata.oauth_client_id ?? '',
+          oauth_client_secret: mcp.metadata.oauth_client_secret ?? '',
+          authorization_url: mcp.metadata.auth.authorization_url ?? '',
+          client_url: mcp.metadata.auth.client_url ?? '',
+          scope: mcp.metadata.auth.scope ?? '',
+          token_exchange_method:
+            mcp.metadata.auth.token_exchange_method ?? TokenExchangeMethodEnum.DefaultPost,
+        });
+      }
+
+      reset(formData);
     }
   }, [mcp, reset]);
 
