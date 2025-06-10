@@ -182,7 +182,7 @@ export default function AgentSelect({
           containerClassName="px-0"
           selectedValue={(field?.value?.value ?? '') + ''}
           displayValue={field?.value?.label ?? ''}
-          selectPlaceholder={createAgent}
+          selectPlaceholder={field?.value?.value ?? createAgent}
           iconSide="right"
           searchPlaceholder={localize('com_agents_search_name')}
           SelectIcon={field?.value?.icon}
