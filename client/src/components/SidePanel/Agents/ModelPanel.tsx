@@ -6,9 +6,10 @@ import {
   getSettingsKeys,
   SettingDefinition,
   agentParamSettings,
+  LocalStorageKeys,
 } from 'librechat-data-provider';
 import type * as t from 'librechat-data-provider';
-import type { AgentForm, AgentModelPanelProps, StringOption } from '~/common';
+import type { AgentForm, AgentModelPanelProps, LastSelectedModels, StringOption } from '~/common';
 import { componentMapping } from '~/components/SidePanel/Parameters/components';
 import ControlCombobox from '~/components/ui/ControlCombobox';
 import { useGetEndpointsQuery } from '~/data-provider';
@@ -16,6 +17,7 @@ import { getEndpointField, cn } from '~/utils';
 import { useLocalize } from '~/hooks';
 import { Panel } from '~/common';
 import keyBy from 'lodash/keyBy';
+import { useLocalStorage } from '~/hooks';
 
 export default function ModelPanel({
   setActivePanel,
@@ -23,6 +25,11 @@ export default function ModelPanel({
   models: modelsData,
 }: AgentModelPanelProps) {
   const localize = useLocalize();
+
+  const [lastSelectedModels] = useLocalStorage<LastSelectedModels | undefined>(
+    LocalStorageKeys.LAST_MODEL,
+    {} as LastSelectedModels,
+  );
 
   const { control, setValue } = useFormContext<AgentForm>();
 
@@ -47,15 +54,25 @@ export default function ModelPanel({
     if (provider && _model) {
       const modelExists = models.includes(_model);
       if (!modelExists) {
+        const lastModel = lastSelectedModels?.[provider];
         const newModels = modelsData[provider] ?? [];
-        setValue('model', newModels[0] ?? '');
+        if (lastModel && newModels.includes(lastModel)) {
+          setValue('model', lastModel);
+        } else {
+          setValue('model', newModels[0] ?? '');
+        }
       }
     }
 
     if (provider && !_model) {
-      setValue('model', models[0] ?? '');
+      const lastModel = lastSelectedModels?.[provider];
+      if (lastModel && models.includes(lastModel)) {
+        setValue('model', lastModel);
+      } else {
+        setValue('model', models[0] ?? '');
+      }
     }
-  }, [provider, models, modelsData, setValue, model]);
+  }, [provider, models, modelsData, setValue, model, lastSelectedModels]);
 
   const { data: endpointsConfig = {} } = useGetEndpointsQuery();
 
